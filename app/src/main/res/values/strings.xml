@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">Practice III</string>
+    <string name="name_string">Default Name</string>
+    <string name="description_string">Default Description</string>
+    <string name="seller_string">Default Seller</string>
+    <string name="price_string">Default Price</string>
+    <string name="picture_string">Default Picture</string>
+    <string name="picture_desc_string">Default Picture Desc</string>
 </resources>
