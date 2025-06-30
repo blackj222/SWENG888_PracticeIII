@@ -79,18 +79,5 @@ public class Product {
     public void setPicture(String picture) {
         this.picture = picture;
     }
-
-    // toString method
-    @Override
-    public String toString() {
-        return "Product {" +
-                "ID=" + id +
-                ", Name='" + name + '\'' +
-                ", Description='" + description + '\'' +
-                ", Seller='" + seller + '\'' +
-                ", Price=$" + price +
-                ", Picture='" + picture + '\'' +
-                '}';
-    }
 }
 

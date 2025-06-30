@@ -12,7 +12,7 @@ import java.util.List;
 
 public class ProductDatabaseHelper extends SQLiteOpenHelper {
 
-    private static final String DATABASE_NAME = "product_db";
+    private static final String DATABASE_NAME = "product_database";
     private static final int DATABASE_VERSION = 1;
 
     private static final String TABLE_PRODUCTS = "products";
@@ -110,5 +110,27 @@ public class ProductDatabaseHelper extends SQLiteOpenHelper {
 
         db.update(TABLE_PRODUCTS, values, COLUMN_ID + " = ?", new String[]{String.valueOf(product.getId())});
         db.close();
+    }
+
+    public void populateProductDatabase(){
+        SQLiteDatabase database = getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+
+        values = new ContentValues();
+        values.put(COLUMN_NAME, "iPhone 14");
+        values.put(COLUMN_DESCRIPTION, "Refurbished iPhone");
+        values.put(COLUMN_SELLER, "Apple");
+        values.put(COLUMN_PRICE, "$600.45");
+        values.put(COLUMN_PICTURE, "A");
+        database.insert(TABLE_PRODUCTS, null, values);
+
+        values = new ContentValues();
+        values.put(COLUMN_NAME, "Note 10");
+        values.put(COLUMN_DESCRIPTION, "Refurbished Note");
+        values.put(COLUMN_SELLER, "Samsung");
+        values.put(COLUMN_PRICE, "$500.45");
+        values.put(COLUMN_PICTURE, "A");
+        database.insert(TABLE_PRODUCTS, null, values);
     }
 }
