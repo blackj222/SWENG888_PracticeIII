@@ -41,4 +41,5 @@ dependencies {
     androidTestImplementation(libs.espresso.core)
     // RecyclerView
     implementation(libs.recyclerview)
+    // implementation(libs.appcompat.v7)
 }

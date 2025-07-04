@@ -116,12 +116,10 @@ public class ProductDatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase database = getWritableDatabase();
 
         ContentValues values = new ContentValues();
-
-        values = new ContentValues();
         values.put(COLUMN_NAME, "iPhone 14");
         values.put(COLUMN_DESCRIPTION, "Refurbished iPhone");
         values.put(COLUMN_SELLER, "Apple");
-        values.put(COLUMN_PRICE, "$600.45");
+        values.put(COLUMN_PRICE, 600.45);
         values.put(COLUMN_PICTURE, "A");
         database.insert(TABLE_PRODUCTS, null, values);
 
@@ -129,7 +127,7 @@ public class ProductDatabaseHelper extends SQLiteOpenHelper {
         values.put(COLUMN_NAME, "Note 10");
         values.put(COLUMN_DESCRIPTION, "Refurbished Note");
         values.put(COLUMN_SELLER, "Samsung");
-        values.put(COLUMN_PRICE, "$500.45");
+        values.put(COLUMN_PRICE, 500.45);
         values.put(COLUMN_PICTURE, "A");
         database.insert(TABLE_PRODUCTS, null, values);
     }

@@ -41,5 +41,4 @@ public class MainPracticeIII extends AppCompatActivity {
                 LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
     }
-
 }
