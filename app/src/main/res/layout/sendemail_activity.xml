@@ -2,30 +2,40 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
+    android:id="@+id/sendemail_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp"
     tools:context=".activity.MainPracticeIII">
 
         <Button
-            android:id="@+id/next_screen_button"
+            android:id="@+id/send_email_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/next_screen_button_string"
+            android:text="@string/send_email_button_string"
             app:layout_constraintTop_toTopOf="parent"
             android:layout_margin="8dp"
                 />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerViewMain"
+            android:id="@+id/selectedRecyclerView"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:scrollbars="vertical"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintTop_toBottomOf="@+id/next_screen_button"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/send_email_button"
+            app:layout_constraintBottom_toTopOf="@id/change_selected_items_button"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
+
+        <Button
+            android:id="@+id/change_selected_items_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/change_selected_items_string"
+            app:layout_constraintTop_toBottomOf="@id/selectedRecyclerView"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_margin="8dp"
+            />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
