@@ -1,7 +1,5 @@
 package edu.psu.sweng888.practiceiii.model;
 
-import android.os.Parcel;
-
 import java.io.Serializable;
 import java.util.UUID;
 
