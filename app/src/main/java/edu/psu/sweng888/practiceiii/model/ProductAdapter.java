@@ -1,46 +1,80 @@
 package edu.psu.sweng888.practiceiii.model;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-import java.util.List;
+
+import java.util.ArrayList;
 
 import edu.psu.sweng888.practiceiii.R;
 
 public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHolder> {
 
-    private List<Product> productList;
-    private Context context;
+    private ArrayList<Product> productList;
+    private ArrayList<Product> selectedProducts = new ArrayList<>();
+    private boolean isSelected = false;
 
-    public ProductAdapter(Context context, List<Product> productList) {
-        this.context = context;
+    public ArrayList<Product> getSelectedProducts() {
+        return selectedProducts;
+    }
+
+    public void addSelectedProducts(ArrayList<Product> selectedProducts) {
+        this.selectedProducts = selectedProducts;
+    }
+
+    public ProductAdapter(ArrayList<Product> productList, boolean isSelected) {
+        this.isSelected = isSelected;
         this.productList = productList;
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_product, parent, false);
+        View view;
+        view = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.list_item_product, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Product product = productList.get(position);
-        holder.textViewName.setText(product.getName());
-        holder.textViewSeller.setText(product.getSeller());
+        holder.nameText.setText(product.getName());
+        String curPrice = "$" + product.getPrice();
+        holder.priceText.setText(curPrice);
         holder.textViewDescription.setText(product.getDescription());
-        holder.textViewPrice.setText(String.valueOf(product.getPrice()));
+        holder.textViewSeller.setText(product.getSeller());
+        holder.checkBox.setEnabled(!isSelected);
+        holder.imageViewProduct.setImageResource(product.getPicture());
 
-        // Load image (from drawable for now)
-        int imageId = context.getResources().getIdentifier(product.getPicture(), "drawable", context.getPackageName());
-        holder.imageViewProduct.setImageResource(imageId);
+        if (!isSelected) {
+            holder.itemView.setOnClickListener(v -> {
+                checkSelection(holder, product);
+            });
+
+            holder.checkBox.setOnClickListener(v -> {
+                checkSelection(holder, product);
+            });
+            holder.checkBox.setChecked(selectedProducts.contains(product));
+        } else {
+            holder.checkBox.setChecked(productList.contains(product));
+        }
+    }
+
+    private void checkSelection(@NonNull ViewHolder holder, Product product) {
+        if (selectedProducts.contains(product)) {
+            selectedProducts.remove(product);
+            holder.checkBox.setChecked(false);
+        } else {
+            selectedProducts.add(product);
+            holder.checkBox.setChecked(true);
+        }
     }
 
     @Override
@@ -48,18 +82,19 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
         return productList.size();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    static class ViewHolder extends RecyclerView.ViewHolder {
+        TextView nameText, priceText, textViewSeller, textViewDescription;
+        CheckBox checkBox;
         ImageView imageViewProduct;
-        TextView textViewName, textViewSeller, textViewDescription, textViewPrice;
 
-        public ViewHolder(View itemView) {
+        ViewHolder(View itemView) {
             super(itemView);
-            imageViewProduct = itemView.findViewById(R.id.imageViewProduct);
-            textViewName = itemView.findViewById(R.id.textViewName);
+            nameText = itemView.findViewById(R.id.textViewName);
+            priceText = itemView.findViewById(R.id.textViewPrice);
+            checkBox = itemView.findViewById(R.id.checkbox);
             textViewSeller = itemView.findViewById(R.id.textViewSeller);
             textViewDescription = itemView.findViewById(R.id.textViewDescription);
-            textViewPrice = itemView.findViewById(R.id.textViewPrice);
+            imageViewProduct = itemView.findViewById(R.id.imageViewProduct);
         }
     }
 }
-

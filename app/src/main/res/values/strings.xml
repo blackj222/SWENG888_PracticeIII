@@ -6,4 +6,7 @@
     <string name="price_string">Default Price</string>
     <string name="picture_string">Default Picture</string>
     <string name="picture_desc_string">Default Picture Desc</string>
+    <string name="next_screen_button_string">Next Screen</string>
+    <string name="send_email_button_string">Send Email</string>
+    <string name="change_selected_items_string">Change Selected Items</string>
 </resources>

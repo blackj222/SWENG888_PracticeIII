@@ -9,6 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class ProductDatabaseHelper extends SQLiteOpenHelper {
 
@@ -32,7 +33,7 @@ public class ProductDatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         String CREATE_TABLE = "CREATE TABLE " + TABLE_PRODUCTS + "("
-                + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+                + COLUMN_ID + " TEXT PRIMARY KEY,"
                 + COLUMN_NAME + " TEXT,"
                 + COLUMN_DESCRIPTION + " TEXT,"
                 + COLUMN_SELLER + " TEXT,"
@@ -51,21 +52,14 @@ public class ProductDatabaseHelper extends SQLiteOpenHelper {
     // Add a product
     public void addProduct(Product product) {
         SQLiteDatabase db = this.getWritableDatabase();
-
-        ContentValues values = new ContentValues();
-        values.put(COLUMN_NAME, product.getName());
-        values.put(COLUMN_DESCRIPTION, product.getDescription());
-        values.put(COLUMN_SELLER, product.getSeller());
-        values.put(COLUMN_PRICE, product.getPrice());
-        values.put(COLUMN_PICTURE, product.getPicture());
-
+        ContentValues values = getContentValues(product);
         db.insert(TABLE_PRODUCTS, null, values);
         db.close();
     }
 
     // Get all products
-    public List<Product> getAllProducts() {
-        List<Product> productList = new ArrayList<>();
+    public ArrayList<Product> getAllProducts() {
+        ArrayList<Product> productList = new ArrayList<>();
         String selectQuery = "SELECT * FROM " + TABLE_PRODUCTS;
 
         SQLiteDatabase db = this.getReadableDatabase();
@@ -73,14 +67,7 @@ public class ProductDatabaseHelper extends SQLiteOpenHelper {
 
         if (cursor.moveToFirst()) {
             do {
-                Product product = new Product(
-                        cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ID)),
-                        cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NAME)),
-                        cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_DESCRIPTION)),
-                        cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_SELLER)),
-                        cursor.getDouble(cursor.getColumnIndexOrThrow(COLUMN_PRICE)),
-                        cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_PICTURE))
-                );
+                Product product = parseProduct(cursor);
                 productList.add(product);
             } while (cursor.moveToNext());
         }
@@ -100,37 +87,52 @@ public class ProductDatabaseHelper extends SQLiteOpenHelper {
     // Update a product
     public void updateProduct(Product product) {
         SQLiteDatabase db = this.getWritableDatabase();
+        db.update(TABLE_PRODUCTS, getContentValues(product), COLUMN_ID + " = ?", new String[]{String.valueOf(product.getId())});
+        db.close();
+    }
 
+    public ContentValues getContentValues(Product product) {
         ContentValues values = new ContentValues();
+        values.put(COLUMN_ID, product.getId().toString());
         values.put(COLUMN_NAME, product.getName());
         values.put(COLUMN_DESCRIPTION, product.getDescription());
         values.put(COLUMN_SELLER, product.getSeller());
         values.put(COLUMN_PRICE, product.getPrice());
         values.put(COLUMN_PICTURE, product.getPicture());
 
-        db.update(TABLE_PRODUCTS, values, COLUMN_ID + " = ?", new String[]{String.valueOf(product.getId())});
-        db.close();
+        return values;
     }
 
     public void populateProductDatabase(){
-        SQLiteDatabase database = getWritableDatabase();
+        this.addProduct(new Product("iPhone 14", "Refurbished iPhone", "Apple", 600.45, 1));
+        this.addProduct(new Product("Note 10", "Refurbished Note", "Samsung", 500.45, 2));
+    }
 
-        ContentValues values = new ContentValues();
+    private Product parseProduct(Cursor cursor) {
+        UUID id = UUID.fromString(cursor.getString(cursor.getColumnIndexOrThrow("id")));
+        String name = cursor.getString(cursor.getColumnIndexOrThrow("name"));
+        String description = cursor.getString(cursor.getColumnIndexOrThrow("description"));
+        String seller = cursor.getString(cursor.getColumnIndexOrThrow("seller"));
+        double price = cursor.getDouble(cursor.getColumnIndexOrThrow("price"));
+        int picture = cursor.getInt(cursor.getColumnIndexOrThrow("picture"));
+        return new Product(id, name, description, seller, price, picture);
+    }
 
-        values = new ContentValues();
-        values.put(COLUMN_NAME, "iPhone 14");
-        values.put(COLUMN_DESCRIPTION, "Refurbished iPhone");
-        values.put(COLUMN_SELLER, "Apple");
-        values.put(COLUMN_PRICE, "$600.45");
-        values.put(COLUMN_PICTURE, "A");
-        database.insert(TABLE_PRODUCTS, null, values);
+    public ArrayList<Product> getByCategory(String value, String comparator, String columnName) {
+        ArrayList<Product> products = new ArrayList<>();
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.query(
+                "Product",
+                null,
+                columnName + " " + comparator + "  ?",
+                new String[]{ value },
+                null, null, null
+        );
 
-        values = new ContentValues();
-        values.put(COLUMN_NAME, "Note 10");
-        values.put(COLUMN_DESCRIPTION, "Refurbished Note");
-        values.put(COLUMN_SELLER, "Samsung");
-        values.put(COLUMN_PRICE, "$500.45");
-        values.put(COLUMN_PICTURE, "A");
-        database.insert(TABLE_PRODUCTS, null, values);
+        while (cursor.moveToNext()) {
+            products.add(parseProduct(cursor));
+        }
+        cursor.close();
+        return products;
     }
 }
