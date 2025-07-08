@@ -30,7 +30,6 @@ public class MainPracticeIII extends AppCompatActivity {
         ArrayList<Product> products;
 
         try (ProductDatabaseHelper dbHelper = new ProductDatabaseHelper(this)) {
-            // this.deleteDatabase("product_database");
             products = dbHelper.getAllProducts();
             if (products.isEmpty()) {
                 dbHelper.populateProductDatabase();
@@ -61,5 +60,11 @@ public class MainPracticeIII extends AppCompatActivity {
             intent.putExtra("selected_products", selectedProducts);
             startActivity(intent);
         });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        this.deleteDatabase("product_database");
     }
 }

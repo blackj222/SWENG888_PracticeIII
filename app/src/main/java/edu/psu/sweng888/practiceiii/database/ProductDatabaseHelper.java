@@ -1,5 +1,6 @@
 package edu.psu.sweng888.practiceiii.database;
 
+import edu.psu.sweng888.practiceiii.R;
 import edu.psu.sweng888.practiceiii.model.*;
 import android.content.ContentValues;
 import android.content.Context;
@@ -38,7 +39,7 @@ public class ProductDatabaseHelper extends SQLiteOpenHelper {
                 + COLUMN_DESCRIPTION + " TEXT,"
                 + COLUMN_SELLER + " TEXT,"
                 + COLUMN_PRICE + " REAL,"
-                + COLUMN_PICTURE + " TEXT)";
+                + COLUMN_PICTURE + " INTEGER)";
         db.execSQL(CREATE_TABLE);
     }
 
@@ -104,8 +105,10 @@ public class ProductDatabaseHelper extends SQLiteOpenHelper {
     }
 
     public void populateProductDatabase(){
-        this.addProduct(new Product("iPhone 14", "Refurbished iPhone", "Apple", 600.45, 1));
-        this.addProduct(new Product("Note 10", "Refurbished Note", "Samsung", 500.45, 2));
+        this.addProduct(new Product("iPhone 14", "Refurbished Apple iPhone", "Apple", 600.45, R.drawable.iphone14));
+        this.addProduct(new Product("Note 10", "Refurbished Samsung Note", "Samsung", 500.45, R.drawable.note10));
+        this.addProduct(new Product("Samsung Z Fold 4", "Refurbished Samsung Z Fold", "Samsung", 700.45, R.drawable.samsung_z_fold4));
+        this.addProduct(new Product("Note 10", "Refurbished Google Pixel", "Google", 450.45, R.drawable.google_pixel5));
     }
 
     private Product parseProduct(Cursor cursor) {

@@ -51,7 +51,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
         holder.textViewDescription.setText(product.getDescription());
         holder.textViewSeller.setText(product.getSeller());
         holder.checkBox.setEnabled(!isSelected);
-        holder.imageViewProduct.setImageResource(product.getPicture());
+        holder.imageViewProduct.setImageResource((product.getPicture()));
 
         if (!isSelected) {
             holder.itemView.setOnClickListener(v -> {
